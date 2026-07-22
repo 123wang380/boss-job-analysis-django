@@ -1,0 +1,105 @@
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>公司详情 - {{ company.companyTitle }}</title>
+    <link rel="stylesheet" href="/static/css/jquery-ui-1.10.3.custom.min.css">
+    <link rel="stylesheet" href="/static/css/entypo.css">
+    <link rel="stylesheet" href="/static/css/css.css">
+    <link rel="stylesheet" href="/static/css/bootstrap.css">
+    <link rel="stylesheet" href="/static/css/neon-core.css">
+    <link rel="stylesheet" href="/static/css/neon-theme.css">
+    <link rel="stylesheet" href="/static/css/neon-forms.css">
+    <link rel="stylesheet" href="/static/css/custom.css">
+    <script src="/static/js/jquery-1.11.0.min.js"></script>
+</head>
+<body class="page-body page-left-in">
+<div class="page-container">
+    <div class="sidebar-menu">
+        <header class="logo-env">
+            <div class="logo">
+                <a href="/myApp/home/">
+                    <h3 style="color:#fff;font-weight:bold;margin-top:5px">招聘数据可视化分析系统</h3>
+                </a>
+            </div>
+        </header>
+        <div class="sidebar-user-info">
+            <div class="sui-normal">
+                <a href="#" class="user-link">
+                    <img style="width:95%;border-radius:50%" src="/media/{{ userInfo.avatar }}" width="120" alt="">
+                    <span style="text-align:center;padding-top:209px">欢迎回来,</span>
+                    <strong style="text-align:center;margin-top:5px">{{ userInfo.username }}</strong>
+                </a>
+            </div>
+        </div>
+        <ul id="main-menu">
+            <li><a href="/myApp/home/"><i class="entypo-gauge"></i><span>首页</span></a></li>
+            <li><a href="/myApp/tableData/"><i class="entypo-layout"></i><span>数据总览</span></a></li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <div class="row"><div class="col-md-6 col-sm-4 clearfix hidden-xs">
+            <ul class="list-inline links-list pull-right">
+                <li class="sep"></li>
+                <li><a href="/myApp/logOut/">退出登录<i class="entypo-logout right"></i></a></li>
+            </ul>
+        </div></div><hr>
+        <ol class="breadcrumb bc-3">
+            <li><a href="/myApp/tableData/"><i class="entypo-home"></i>数据总览</a></li>
+            <li class="active"><strong>公司详情</strong></li>
+        </ol>
+        <h2>{{ company.companyTitle }}</h2><br>
+        <div class="panel panel-default">
+            <div class="panel-heading"><h3 class="panel-title">企业信息</h3></div>
+            <div class="panel-body">
+                <table class="table table-bordered">
+                    <tr><th width="150">公司名称</th><td><strong>{{ company.companyTitle }}</strong></td></tr>
+                    <tr><th>公司性质</th><td>{{ company.companyNature }}</td></tr>
+                    <tr><th>融资阶段</th><td>{{ company.companyStatus }}</td></tr>
+                    <tr><th>公司规模</th><td>{{ company.companyPeople }}</td></tr>
+                    <tr><th>所在城市</th><td>{{ company.address }} · {{ company.dist }}</td></tr>
+                </table>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading"><h3 class="panel-title">在招岗位（{{ jobs|length }}个）</h3></div>
+            <div class="panel-body">
+                {% if jobs %}
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>岗位名称</th>
+                            <th>薪资</th>
+                            <th>学历</th>
+                            <th>经验</th>
+                            <th>城市</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for j in jobs %}
+                        <tr>
+                            <td><a href="/myApp/jobDetail/{{ j.id }}">{{ j.title }}</a></td>
+                            <td><span class="text-danger">{{ j.salary }}</span></td>
+                            <td>{{ j.educational }}</td>
+                            <td>{{ j.workExperience }}</td>
+                            <td>{{ j.address }}·{{ j.dist }}</td>
+                            <td><a href="/myApp/jobDetail/{{ j.id }}" class="btn btn-info btn-xs">查看详情</a></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p class="text-muted">暂时没有在招岗位</p>
+                {% endif %}
+            </div>
+        </div>
+        <footer class="main">Copyright &copy; 2026.基于Selenium的招聘岗位数据采集与可视化分析系统设计.</footer>
+    </div>
+</div>
+<script src="/static/js/main-gsap.js"></script>
+<script src="/static/js/bootstrap.js"></script>
+<script src="/static/js/neon-api.js"></script>
+</body>
+</html>

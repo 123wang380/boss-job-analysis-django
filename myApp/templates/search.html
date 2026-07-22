@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>职位搜索</title>
+    <link rel="stylesheet" href="/static/css/jquery-ui-1.10.3.custom.min.css">
+    <link rel="stylesheet" href="/static/css/entypo.css">
+    <link rel="stylesheet" href="/static/css/css.css">
+    <link rel="stylesheet" href="/static/css/bootstrap.css">
+    <link rel="stylesheet" href="/static/css/neon-core.css">
+    <link rel="stylesheet" href="/static/css/neon-theme.css">
+    <link rel="stylesheet" href="/static/css/neon-forms.css">
+    <link rel="stylesheet" href="/static/css/custom.css">
+    <script src="/static/js/jquery-1.11.0.min.js"></script>
+</head>
+<body class="page-body page-left-in">
+
+<div class="page-container">
+    <!-- 侧边栏 -->
+    <div class="sidebar-menu">
+        <header class="logo-env">
+            <div class="logo">
+                <a href="/myApp/home/">
+                    <h3 style="color:#fff;font-weight:bold;margin-top:5px">基于Selenium的招聘岗位数据采集与可视化分析系统设计</h3>
+                </a>
+            </div>
+        </header>
+        <div class="sidebar-user-info">
+            <div class="sui-normal">
+                <a href="#" class="user-link">
+                    <img style="width:95%;border-radius:50%" src="/media/{{ userInfo.avatar }}" width="120" alt="">
+                    <span style="text-align:center;padding-top:209px">欢迎回来,</span>
+                    <strong style="text-align:center;margin-top:5px">{{ userInfo.username }}</strong>
+                </a>
+            </div>
+        </div>
+        <ul id="main-menu" class="main-menu">
+            <li><a href="/myApp/home/"><i class="entypo-gauge"></i><span>系统首页</span></a></li>
+            <li class="opened active"><a href="/myApp/search/"><i class="entypo-search"></i><span>职位搜索</span></a></li>
+            <li><a href="/myApp/tableData/"><i class="entypo-database"></i><span>数据总览</span></a></li>
+            <li><a href="/myApp/salary/"><i class="entypo-chart-bar"></i><span>薪资分析</span></a></li>
+            <li><a href="/myApp/educational/"><i class="entypo-graduation-cap"></i><span>学历分布</span></a></li>
+            <li><a href="/myApp/company/"><i class="entypo-suitcase"></i><span>企业分析</span></a></li>
+            <li><a href="/myApp/companyStatus/"><i class="entypo-chart-line"></i><span>融资分析</span></a></li>
+            <li><a href="/myApp/address/"><i class="entypo-location"></i><span>城市分析</span></a></li>
+            <li><a href="/myApp/techstack/"><i class="entypo-code"></i><span>技术栈分析</span></a></li>
+            <li><a href="/myApp/companyTags/"><i class="entypo-cloud"></i><span>福利词云</span></a></li>
+            <li><a href="/myApp/historyTableData/"><i class="entypo-clock"></i><span>浏览历史</span></a></li>
+            <li class="sep"><hr></li>
+            <li><a href="/myApp/selfInfo/"><i class="entypo-user"></i><span>个人信息</span></a></li>
+            <li><a href="/myApp/changePassword/"><i class="entypo-lock"></i><span>修改密码</span></a></li>
+            <li><a href="/myApp/logOut/"><i class="entypo-logout"></i><span>退出登录</span></a></li>
+        </ul>
+    </div>
+
+    <!-- 主内容区 -->
+    <div class="main-content">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>职位高级搜索</h3>
+                <hr>
+
+                <!-- 搜索表单 -->
+                <form method="get" action="/myApp/search/" class="form-inline" style="margin-bottom:20px">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>关键词</label>
+                                        <input type="text" class="form-control" name="keyword"
+                                               value="{{ keyword }}" placeholder="职位/公司/技能..."
+                                               style="width:100%">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>薪资范围</label>
+                                        <select name="salary" class="form-control" style="width:100%">
+                                            <option value="不限" {% if salary_range == '不限' %}selected{% endif %}>不限</option>
+                                            {% for s in salary_ranges %}
+                                            <option value="{{ s }}" {% if salary_range == s %}selected{% endif %}>{{ s }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>学历要求</label>
+                                        <select name="education" class="form-control" style="width:100%">
+                                            <option value="不限" {% if education == '不限' %}selected{% endif %}>不限</option>
+                                            {% for e in educations %}
+                                            <option value="{{ e }}" {% if education == e %}selected{% endif %}>{{ e }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>工作经验</label>
+                                        <select name="experience" class="form-control" style="width:100%">
+                                            <option value="不限" {% if experience == '不限' %}selected{% endif %}>不限</option>
+                                            {% for exp in workExperiences %}
+                                            <option value="{{ exp }}" {% if experience == exp %}selected{% endif %}>{{ exp }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>城市</label>
+                                        <select name="city" class="form-control" style="width:100%">
+                                            <option value="不限" {% if city == '不限' %}selected{% endif %}>不限</option>
+                                            {% for c in cities %}
+                                            <option value="{{ c }}" {% if city == c %}selected{% endif %}>{{ c }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top:10px">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>排序方式</label>
+                                        <select name="order" class="form-control" style="width:100%">
+                                            <option value="date_desc" {% if order_by == 'date_desc' %}selected{% endif %}>发布日期(新→旧)</option>
+                                            <option value="salary_desc" {% if order_by == 'salary_desc' %}selected{% endif %}>薪资(高→低)</option>
+                                            <option value="salary_asc" {% if order_by == 'salary_asc' %}selected{% endif %}>薪资(低→高)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group" style="margin-top:20px">
+                                        <button type="submit" class="btn btn-info btn-block">
+                                            <i class="entypo-search"></i> 搜索
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group" style="margin-top:20px">
+                                        <a href="{{ boss_search_url }}" target="_blank" rel="noreferrer noopener" class="btn btn-warning btn-block">
+                                            <i class="entypo-export"></i> 在BOSS直聘搜索
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group" style="margin-top:20px">
+                                        <a href="/myApp/search/" class="btn btn-default btn-block">重置条件</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- 搜索结果统计 -->
+                <div class="alert alert-info">
+                    共找到 <strong>{{ total }}</strong> 条符合条件的职位
+                    {% if keyword %}，关键词："{{ keyword }}"{% endif %}
+                </div>
+
+                <!-- 结果表格 -->
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        {% if results %}
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th width="5%">#</th>
+                                    <th width="18%">职位名称</th>
+                                    <th width="15%">公司</th>
+                                    <th width="6%">城市</th>
+                                    <th width="8%">薪资</th>
+                                    <th width="8%">学历</th>
+                                    <th width="10%">经验</th>
+                                    <th width="20%">技能标签</th>
+                                    <th width="10%">日期</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for job in results %}
+                                <tr>
+                                    <td>{{ start_index|add:forloop.counter }}</td>
+                                    <td><a href="{{ job.detailUrl }}" target="_blank" title="{{ job.title }}">{{ job.title|truncatechars:20 }}</a></td>
+                                    <td>{{ job.companyTitle|truncatechars:16 }}</td>
+                                    <td>{{ job.address }}</td>
+                                    <td>
+                                        {% if job.pratice %}
+                                            <span class="label label-info">实习</span>
+                                        {% else %}
+                                            <strong style="color:#e74c3c">
+                                                {% if job.salary_display > 0 %}
+                                                    {{ job.salary_display|floatformat:0 }}K
+                                                {% else %}
+                                                    面议
+                                                {% endif %}
+                                            </strong>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ job.educational }}</td>
+                                    <td>{{ job.workExperience }}</td>
+                                    <td><small>{{ job.workTag_display|truncatechars:30 }}</small></td>
+                                    <td><small>{{ job.createTime|date:"Y-m-d" }}</small></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        <!-- 分页 -->
+                        <div class="text-center">
+                            <ul class="pagination">
+                                {% if page > 1 %}
+                                <li><a href="?keyword={{ keyword }}&salary={{ salary_range }}&education={{ education }}&experience={{ experience }}&city={{ city }}&order={{ order_by }}&page=1">首页</a></li>
+                                <li><a href="?keyword={{ keyword }}&salary={{ salary_range }}&education={{ education }}&experience={{ experience }}&city={{ city }}&order={{ order_by }}&page={{ page|add:-1 }}">&laquo;</a></li>
+                                {% endif %}
+                                {% for p in page_range %}
+                                <li {% if p == page %}class="active"{% endif %}>
+                                    <a href="?keyword={{ keyword }}&salary={{ salary_range }}&education={{ education }}&experience={{ experience }}&city={{ city }}&order={{ order_by }}&page={{ p }}">{{ p }}</a>
+                                </li>
+                                {% endfor %}
+                                {% if page < total_pages %}
+                                <li><a href="?keyword={{ keyword }}&salary={{ salary_range }}&education={{ education }}&experience={{ experience }}&city={{ city }}&order={{ order_by }}&page={{ page|add:1 }}">&raquo;</a></li>
+                                <li><a href="?keyword={{ keyword }}&salary={{ salary_range }}&education={{ education }}&experience={{ experience }}&city={{ city }}&order={{ order_by }}&page={{ total_pages }}">末页</a></li>
+                                {% endif %}
+                            </ul>
+                            <p class="text-muted">第 {{ page }} / {{ total_pages }} 页</p>
+                        </div>
+                        {% else %}
+                        <div class="text-center" style="padding:40px">
+                            <i class="entypo-search" style="font-size:48px;color:#ccc"></i>
+                            <p class="text-muted" style="margin-top:10px">没有找到匹配的职位，请尝试放宽搜索条件</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 页脚 -->
+        <footer class="main-footer sticky footer-type-1">
+            <div class="footer-inner">
+                <div class="footer-text">
+                    Copyright &copy; 2026.基于Selenium的招聘岗位数据采集与可视化分析系统设计.
+                    <a target="_blank" href="https://www.zhipin.com">招聘岗位</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+
+<script src="/static/js/main-gsap.js"></script>
+<script src="/static/js/jquery-ui-1.10.3.minimal.min.js"></script>
+<script src="/static/js/bootstrap.js"></script>
+<script src="/static/js/joinable.js"></script>
+<script src="/static/js/resizeable.js"></script>
+<script src="/static/js/neon-api.js"></script>
+<script src="/static/js/neon-custom.js"></script>
+<script src="/static/js/neon-demo.js"></script>
+</body>
+</html>

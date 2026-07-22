@@ -1,0 +1,54 @@
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+eggs/
+*.egg
+
+# ===== Virtual Environment =====
+.venv/
+venv/
+env/
+.virtualenv/
+ENV/
+
+# ===== Django =====
+db.sqlite3
+*.log
+local_settings.py
+/staticfiles/
+/media/
+
+# ===== IDE =====
+.idea/
+.vs/
+*.swp
+*.swo
+*~
+.vscode/
+.DS_Store
+Thumbs.db
+
+# ===== Selenium / Spider =====
+spider/chromedriver.exe
+spider/geckodriver.exe
+spider/temp.csv
+
+# ===== Claude / AI =====
+.claude/
+
+# ===== OS =====
+*.lnk
+Desktop.ini
+
+# ===== Temp files =====
+temp_*.html
+*.tmp
+
+# ===== Sensitive =====
+*.env
+.env.*

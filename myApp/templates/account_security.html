@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>账号安全</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.css">
+    <link rel="stylesheet" href="/static/css/neon-core.css">
+    <link rel="stylesheet" href="/static/css/neon-theme.css">
+    <link rel="stylesheet" href="/static/css/neon-forms.css">
+    <link rel="stylesheet" href="/static/css/entypo.css">
+    <script src="/static/js/jquery-1.11.0.min.js"></script>
+</head>
+<body class="page-body page-left-in">
+<div class="page-container">
+    <div class="sidebar-menu">
+        <header class="logo-env">
+            <div class="logo"><h3 style="color:#fff;font-weight:bold;margin-top:5px">基于Selenium的招聘岗位数据采集与可视化分析系统设计</h3></div>
+        </header>
+        <ul class="main-menu">
+            <li><a href="/myApp/home/"><i class="entypo-gauge"></i><span>系统首页</span></a></li>
+            <li><a href="/myApp/selfInfo/"><i class="entypo-user"></i><span>个人信息</span></a></li>
+            <li class="opened active"><a href="/myApp/accountSecurity/"><i class="entypo-shield"></i><span>账号安全</span></a></li>
+            <li><a href="/myApp/changePassword/"><i class="entypo-lock"></i><span>修改密码</span></a></li>
+            <li><a href="/myApp/logOut/"><i class="entypo-logout"></i><span>退出登录</span></a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="row"><div class="col-md-8 col-md-offset-2">
+            <h3>账号安全中心</h3><hr>
+
+            <div class="panel panel-default">
+                <div class="panel-heading"><h3 class="panel-title">安全信息</h3></div>
+                <div class="panel-body">
+                    <table class="table">
+                        <tr><td width="30%"><strong>用户名</strong></td><td>{{ userInfo.username }}</td></tr>
+                        <tr><td><strong>绑定手机号</strong></td><td>{{ phone_masked }} <a href="/myApp/bindPhone/" class="btn btn-xs btn-info">修改</a></td></tr>
+                        <tr><td><strong>账号状态</strong></td><td>{% if userInfo.is_active %}<span class="label label-success">正常</span>{% else %}<span class="label label-danger">已禁用</span>{% endif %}</td></tr>
+                        <tr><td><strong>注册时间</strong></td><td>{{ userInfo.createTime }}</td></tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading"><h3 class="panel-title">操作</h3></div>
+                <div class="panel-body">
+                    <a href="/myApp/changePassword/" class="btn btn-warning"><i class="entypo-lock"></i> 修改密码</a>
+                    <a href="/myApp/deleteAccount/" class="btn btn-danger"><i class="entypo-cancel"></i> 注销账号</a>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading"><h3 class="panel-title">最近登录记录</h3></div>
+                <div class="panel-body">
+                    <table class="table table-striped">
+                        <thead><tr><th>时间</th><th>IP地址</th><th>登录方式</th></tr></thead>
+                        <tbody>
+                            {% for log in login_logs %}
+                            <tr>
+                                <td>{{ log.login_time|date:"Y-m-d H:i:s" }}</td>
+                                <td>{{ log.ip_address }}</td>
+                                <td>{% if log.login_type == 'phone' %}手机验证码{% else %}账号密码{% endif %}</td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="3" class="text-center text-muted">暂无登录记录</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div></div>
+
+        <footer class="main-footer"><div class="footer-inner"><div class="footer-text">
+            Copyright &copy; 2026.基于Selenium的招聘岗位数据采集与可视化分析系统设计.
+        </div></div></footer>
+    </div>
+</div>
+<script src="/static/js/main-gsap.js"></script>
+<script src="/static/js/jquery-ui-1.10.3.minimal.min.js"></script>
+<script src="/static/js/bootstrap.js"></script>
+<script src="/static/js/joinable.js"></script>
+<script src="/static/js/resizeable.js"></script>
+<script src="/static/js/neon-api.js"></script>
+<script src="/static/js/neon-custom.js"></script>
+<script src="/static/js/neon-demo.js"></script>
+</body>
+</html>

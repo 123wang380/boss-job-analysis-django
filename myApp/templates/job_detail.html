@@ -1,0 +1,108 @@
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>岗位详情 - {{ job.title }}</title>
+    <link rel="stylesheet" href="/static/css/jquery-ui-1.10.3.custom.min.css">
+    <link rel="stylesheet" href="/static/css/entypo.css">
+    <link rel="stylesheet" href="/static/css/css.css">
+    <link rel="stylesheet" href="/static/css/bootstrap.css">
+    <link rel="stylesheet" href="/static/css/neon-core.css">
+    <link rel="stylesheet" href="/static/css/neon-theme.css">
+    <link rel="stylesheet" href="/static/css/neon-forms.css">
+    <link rel="stylesheet" href="/static/css/custom.css">
+    <script src="/static/js/jquery-1.11.0.min.js"></script>
+</head>
+<body class="page-body page-left-in">
+<div class="page-container">
+    <div class="sidebar-menu">
+        <header class="logo-env">
+            <div class="logo">
+                <a href="/myApp/home/">
+                    <h3 style="color:#fff;font-weight:bold;margin-top:5px">招聘数据可视化分析系统</h3>
+                </a>
+            </div>
+        </header>
+        <div class="sidebar-user-info">
+            <div class="sui-normal">
+                <a href="#" class="user-link">
+                    <img style="width:95%;border-radius:50%" src="/media/{{ userInfo.avatar }}" width="120" alt="">
+                    <span style="text-align:center;padding-top:209px">欢迎回来,</span>
+                    <strong style="text-align:center;margin-top:5px">{{ userInfo.username }}</strong>
+                </a>
+            </div>
+        </div>
+        <ul id="main-menu">
+            <li><a href="/myApp/home/"><i class="entypo-gauge"></i><span>首页</span></a></li>
+            <li><a href="/myApp/tableData/"><i class="entypo-layout"></i><span>数据总览</span></a></li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <div class="row"><div class="col-md-6 col-sm-4 clearfix hidden-xs">
+            <ul class="list-inline links-list pull-right">
+                <li class="sep"></li>
+                <li><a href="/myApp/logOut/">退出登录<i class="entypo-logout right"></i></a></li>
+            </ul>
+        </div></div><hr>
+        <ol class="breadcrumb bc-3">
+            <li><a href="/myApp/tableData/"><i class="entypo-home"></i>数据总览</a></li>
+            <li class="active"><strong>岗位详情</strong></li>
+        </ol>
+        <h2>{{ job.title }}</h2><br>
+        <div class="panel panel-default">
+            <div class="panel-heading"><h3 class="panel-title">基本信息</h3></div>
+            <div class="panel-body">
+                <table class="table table-bordered">
+                    <tr><th width="150">岗位名称</th><td><strong>{{ job.title }}</strong></td></tr>
+                    <tr><th>公司名称</th><td><a href="/myApp/companyDetail/{{ job.id }}">{{ job.companyTitle }}</a></td></tr>
+                    <tr><th>工作地点</th><td>{{ job.address }} · {{ job.dist }}</td></tr>
+                    <tr><th>薪资待遇</th><td><span class="text-danger" style="font-size:18px;font-weight:bold">{{ job.salary }}</span></td></tr>
+                    <tr><th>学历要求</th><td>{{ job.educational }}</td></tr>
+                    <tr><th>工作经验</th><td>{{ job.workExperience }}</td></tr>
+                    <tr><th>岗位性质</th><td>{% if job.pratice %}实习{% else %}全职{% endif %}</td></tr>
+                </table>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading"><h3 class="panel-title">公司信息</h3></div>
+            <div class="panel-body">
+                <table class="table table-bordered">
+                    <tr><th width="150">公司性质</th><td>{{ job.companyNature }}</td></tr>
+                    <tr><th>融资阶段</th><td>{{ job.companyStatus }}</td></tr>
+                    <tr><th>公司规模</th><td>{{ job.companyPeople }}</td></tr>
+                    <tr><th>公司福利</th><td>
+                        {% if job.companyTags != '无' %}
+                            {% for ctag in job.companyTags %}
+                                <span class="label label-success" style="margin:2px;display:inline-block">{{ ctag }}</span>
+                            {% endfor %}
+                        {% else %}无{% endif %}
+                    </td></tr>
+                </table>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading"><h3 class="panel-title">技能标签</h3></div>
+            <div class="panel-body">
+                {% for tag in job.workTag %}
+                    <code style="margin:3px;padding:6px 10px;font-size:13px">{{ tag }}</code>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading"><h3 class="panel-title">HR信息</h3></div>
+            <div class="panel-body">
+                <table class="table table-bordered">
+                    <tr><th width="150">HR姓名</th><td>{{ job.hrName }}</td></tr>
+                    <tr><th>HR职位</th><td>{{ job.hrWork }}</td></tr>
+                </table>
+            </div>
+        </div>
+        <footer class="main">Copyright &copy; 2026.基于Selenium的招聘岗位数据采集与可视化分析系统设计.</footer>
+    </div>
+</div>
+<script src="/static/js/main-gsap.js"></script>
+<script src="/static/js/bootstrap.js"></script>
+<script src="/static/js/neon-api.js"></script>
+</body>
+</html>

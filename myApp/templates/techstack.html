@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>技术栈分析</title>
+    <link rel="stylesheet" href="/static/css/jquery-ui-1.10.3.custom.min.css">
+    <link rel="stylesheet" href="/static/css/entypo.css">
+    <link rel="stylesheet" href="/static/css/css.css">
+    <link rel="stylesheet" href="/static/css/bootstrap.css">
+    <link rel="stylesheet" href="/static/css/neon-core.css">
+    <link rel="stylesheet" href="/static/css/neon-theme.css">
+    <link rel="stylesheet" href="/static/css/neon-forms.css">
+    <link rel="stylesheet" href="/static/css/custom.css">
+    <script src="/static/js/jquery-1.11.0.min.js"></script>
+    <script src="/static/js/echarts.js"></script>
+</head>
+<body class="page-body page-left-in">
+
+<div class="page-container">
+    <!-- 侧边栏 -->
+    <div class="sidebar-menu">
+        <header class="logo-env">
+            <div class="logo">
+                <a href="/myApp/home/">
+                    <h3 style="color:#fff;font-weight:bold;margin-top:5px">基于Selenium的招聘岗位数据采集与可视化分析系统设计</h3>
+                </a>
+            </div>
+        </header>
+        <div class="sidebar-user-info">
+            <div class="sui-normal">
+                <a href="#" class="user-link">
+                    <img style="width:95%;border-radius:50%" src="/media/{{ userInfo.avatar }}" width="120" alt="">
+                    <span style="text-align:center;padding-top:209px">欢迎回来,</span>
+                    <strong style="text-align:center;margin-top:5px">{{ userInfo.username }}</strong>
+                </a>
+            </div>
+        </div>
+        <ul id="main-menu" class="main-menu">
+            <li><a href="/myApp/home/"><i class="entypo-gauge"></i><span>系统首页</span></a></li>
+            <li><a href="/myApp/search/"><i class="entypo-search"></i><span>职位搜索</span></a></li>
+            <li><a href="/myApp/tableData/"><i class="entypo-database"></i><span>数据总览</span></a></li>
+            <li><a href="/myApp/salary/"><i class="entypo-chart-bar"></i><span>薪资分析</span></a></li>
+            <li><a href="/myApp/educational/"><i class="entypo-graduation-cap"></i><span>学历分布</span></a></li>
+            <li><a href="/myApp/company/"><i class="entypo-suitcase"></i><span>企业分析</span></a></li>
+            <li><a href="/myApp/companyStatus/"><i class="entypo-chart-line"></i><span>融资分析</span></a></li>
+            <li><a href="/myApp/address/"><i class="entypo-location"></i><span>城市分析</span></a></li>
+            <li class="opened active"><a href="/myApp/techstack/"><i class="entypo-code"></i><span>技术栈分析</span></a></li>
+            <li><a href="/myApp/companyTags/"><i class="entypo-cloud"></i><span>福利词云</span></a></li>
+            <li><a href="/myApp/historyTableData/"><i class="entypo-clock"></i><span>浏览历史</span></a></li>
+            <li class="sep"><hr></li>
+            <li><a href="/myApp/selfInfo/"><i class="entypo-user"></i><span>个人信息</span></a></li>
+            <li><a href="/myApp/changePassword/"><i class="entypo-lock"></i><span>修改密码</span></a></li>
+            <li><a href="/myApp/logOut/"><i class="entypo-logout"></i><span>退出登录</span></a></li>
+        </ul>
+    </div>
+
+    <!-- 主内容区 -->
+    <div class="main-content">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>技术栈需求分析</h3>
+                <hr>
+
+                <!-- 技术需求排行图 -->
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">热门技术需求 Top 30</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div id="techBarChart" style="height:500px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">技术平均薪资</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div id="techSalaryChart" style="height:500px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 按职位类别筛选 -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">
+                                    按职位类别查看技术需求
+                                    <span style="float:right">
+                                        <select id="categorySelect" onchange="changeCategory()" class="form-control" style="width:200px;display:inline;margin-top:-7px">
+                                            <option value="all" {% if category == 'all' %}selected{% endif %}>全部类别</option>
+                                            {% for c in categories %}
+                                            <option value="{{ c }}" {% if category == c %}selected{% endif %}>{{ c }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </span>
+                                </h3>
+                            </div>
+                            <div class="panel-body">
+                                <div id="categoryTechChart" style="height:400px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 技术热度表格 -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">技术需求详细数据</h3>
+                            </div>
+                            <div class="panel-body">
+                                <table class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>排名</th>
+                                            <th>技术名称</th>
+                                            <th>需求次数</th>
+                                            <th>平均薪资(K)</th>
+                                            <th>热度条</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for tech in tech_list %}
+                                        <tr>
+                                            <td>{{ forloop.counter }}</td>
+                                            <td><strong>{{ tech.name }}</strong></td>
+                                            <td>{{ tech.count }}</td>
+                                            <td>
+                                                <span class="label label-info">{{ tech.avg_salary }}K</span>
+                                            </td>
+                                            <td>
+                                                <div class="progress" style="margin:0">
+                                                    <div class="progress-bar progress-bar-success" style="width:{{ tech.pct }}%"></div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 页脚 -->
+        <footer class="main-footer sticky footer-type-1">
+            <div class="footer-inner">
+                <div class="footer-text">
+                    Copyright &copy; 2026.基于Selenium的招聘岗位数据采集与可视化分析系统设计.
+                    <a target="_blank" href="https://www.zhipin.com">招聘岗位</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+
+<script src="/static/js/main-gsap.js"></script>
+<script src="/static/js/jquery-ui-1.10.3.minimal.min.js"></script>
+<script src="/static/js/bootstrap.js"></script>
+<script src="/static/js/joinable.js"></script>
+<script src="/static/js/resizeable.js"></script>
+<script src="/static/js/neon-api.js"></script>
+<script src="/static/js/neon-custom.js"></script>
+<script src="/static/js/neon-demo.js"></script>
+<script>
+// 技术需求排行图（横向柱状图）
+var techBarChart = echarts.init(document.getElementById('techBarChart'));
+techBarChart.setOption({
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+    grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+    xAxis: { type: 'value', name: '需求次数' },
+    yAxis: {
+        type: 'category',
+        data: [{% for n in tech_names reversed %}'{{ n }}'{% if not forloop.last %},{% endif %}{% endfor %}],
+        axisLabel: { fontSize: 11 }
+    },
+    series: [{
+        type: 'bar',
+        data: [{% for c in tech_counts reversed %}{{ c }}{% if not forloop.last %},{% endif %}{% endfor %}],
+        itemStyle: {
+            color: function(params) {
+                var colors = ['#2ec7c9','#b6a2de','#5ab1ef','#ffb980','#d87a80',
+                              '#8d98b3','#e5cf0d','#97b552','#95706d','#dc69aa',
+                              '#07a2a4','#9a7fd1','#588dd5','#f5994e','#c05050',
+                              '#59678c','#c9ab00','#7eb00a','#6f5553','#c14089'];
+                return colors[params.dataIndex % colors.length];
+            }
+        }
+    }]
+});
+
+// 技术平均薪资图（横向柱状图）
+var techSalaryChart = echarts.init(document.getElementById('techSalaryChart'));
+techSalaryChart.setOption({
+    tooltip: { trigger: 'axis' },
+    grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+    xAxis: { type: 'value', name: '平均薪资(K)' },
+    yAxis: {
+        type: 'category',
+        data: [{% for n in tech_names|slice:":10" reversed %}'{{ n }}'{% if not forloop.last %},{% endif %}{% endfor %}],
+        axisLabel: { fontSize: 10 }
+    },
+    series: [{
+        type: 'bar',
+        data: [{% for s in tech_avg_salaries|slice:":10" reversed %}{{ s }}{% if not forloop.last %},{% endif %}{% endfor %}],
+        itemStyle: { color: '#5ab1ef' }
+    }]
+});
+
+// 按类别筛选
+function changeCategory() {
+    var cat = document.getElementById('categorySelect').value;
+    window.location.href = '/myApp/techstack/?category=' + cat;
+}
+
+// 类别技术需求图
+var categoryTechChart = echarts.init(document.getElementById('categoryTechChart'));
+categoryTechChart.setOption({
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+    grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+    xAxis: { type: 'value', name: '需求次数' },
+    yAxis: {
+        type: 'category',
+        data: [{% for t in category_techs %}'{{ t.0 }}'{% if not forloop.last %},{% endif %}{% endfor %}],
+        axisLabel: { fontSize: 10 }
+    },
+    series: [{
+        type: 'bar',
+        data: [{% for t in category_techs %}{{ t.1 }}{% if not forloop.last %},{% endif %}{% endfor %}],
+        itemStyle: { color: '#ffb980' }
+    }]
+});
+</script>
+</body>
+</html>
